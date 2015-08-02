@@ -23,3 +23,6 @@ def test_build():
                                                     'dependencies': [],
                                                     'implicits': []}],
                                   'implicits': []}]
+
+    json = dumps(build, cls=ReggaeEncoder)
+    assert(loads(json) == build.json_dict())
