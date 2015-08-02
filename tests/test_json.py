@@ -17,8 +17,9 @@ def test_target():
 def test_build():
     build = Build(Target("foo", "dmd -offoo foo.d", [Target("foo.d")]))
     assert build.json_dict() == [{'command': 'dmd -offoo foo.d',
-                                  'outputs': 'foo',
+                                  'outputs': ['foo'],
                                   'dependencies': [{'command': '',
                                                     'outputs': ['foo.d'],
                                                     'dependencies': [],
-                                                    'implicits': []}]}]
+                                                    'implicits': []}],
+                                  'implicits': []}]

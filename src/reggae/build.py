@@ -11,10 +11,13 @@ class Target(object):
     def json_dict(self):
         return {'outputs': self.outputs,
                 'command': self.cmd,
-                'dependencies': self.deps,
-                'implicits': self.implicits}
+                'dependencies': [t.json_dict() for t in self.deps],
+                'implicits': [t.json_dict() for t in self.implicits]}
 
 
 class Build(object):
-    def __init__(self, targets):
+    def __init__(self, *targets):
         self.targets = targets
+
+    def json_dict(self):
+        return [t.json_dict() for t in self.targets]
