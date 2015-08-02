@@ -3,4 +3,6 @@ from inspect import getmembers
 
 
 def get_build(module):
-    return next(v for n, v in getmembers(module) if isinstance(v, Build))
+    builds = [v for n, v in getmembers(module) if isinstance(v, Build)]
+    assert len(builds) == 1
+    return builds[0]
