@@ -8,16 +8,16 @@ class Target(object):
         self.deps = deps
         self.implicits = implicits
 
-    def json_dict(self):
+    def jsonify(self):
         return {'outputs': self.outputs,
                 'command': self.cmd,
-                'dependencies': [t.json_dict() for t in self.deps],
-                'implicits': [t.json_dict() for t in self.implicits]}
+                'dependencies': [t.jsonify() for t in self.deps],
+                'implicits': [t.jsonify() for t in self.implicits]}
 
 
 class Build(object):
     def __init__(self, *targets):
         self.targets = targets
 
-    def json_dict(self):
-        return [t.json_dict() for t in self.targets]
+    def jsonify(self):
+        return [t.jsonify() for t in self.targets]
