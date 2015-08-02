@@ -1,5 +1,8 @@
 class Target(object):
     def __init__(self, outputs, cmd="", deps=[], implicits=[]):
+        if not isinstance(outputs, list):
+            outputs = [outputs]
+
         self.outputs = outputs
         self.cmd = cmd
         self.deps = deps
