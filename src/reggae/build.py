@@ -1,7 +1,8 @@
 class Target(object):
     def __init__(self, outputs, cmd="", deps=[], implicits=[]):
-        if not isinstance(outputs, list):
-            outputs = [outputs]
+        outputs = _listify(outputs)
+        deps = _listify(deps)
+        implicits = _listify(implicits)
 
         self.outputs = outputs
         self.cmd = cmd
@@ -13,6 +14,10 @@ class Target(object):
                 'command': self.cmd,
                 'dependencies': [t.jsonify() for t in self.deps],
                 'implicits': [t.jsonify() for t in self.implicits]}
+
+
+def _listify(arg):
+    return arg if isinstance(arg, list) else [arg]
 
 
 class Build(object):
