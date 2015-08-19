@@ -41,3 +41,25 @@ class LinkCommand(object):
 
     def jsonify(self):
         return {'type': 'link', 'flags': self.flags}
+
+
+def static_library(name,
+                   src_dirs=[],
+                   exclude_dirs=[],
+                   src_files=[],
+                   exclude_files=[],
+                   flags='',
+                   includes=[],
+                   string_imports=[]):
+
+    assert name is not None
+
+    return DynamicDependencies('staticLibrary',
+                               name=name,
+                               src_dirs=src_dirs,
+                               exclude_dirs=exclude_dirs,
+                               src_files=src_files,
+                               exclude_files=exclude_files,
+                               flags=flags,
+                               includes=includes,
+                               string_imports=string_imports)

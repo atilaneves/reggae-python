@@ -1,6 +1,6 @@
 from reggae.json import ReggaeEncoder
 from reggae.build import Target, Build
-from reggae.rules import link, object_files
+from reggae.rules import link, object_files, static_library
 from json import dumps, loads
 
 
@@ -127,6 +127,36 @@ def test_link_dynamic():
           "dependencies": {
               "type": "dynamic",
               "func": "objectFiles",
+              "src_dirs": ["src"],
+              "exclude_dirs": [],
+              "src_files": [],
+              "exclude_files": [],
+              "flags": "-I$project/src",
+              "includes": [],
+              "string_imports": []},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}}]
+    json = dumps(bld, cls=ReggaeEncoder)
+    assert(loads(json) == bld.jsonify())
+
+
+def test_static_lib():
+    lib = static_library('libstuff.a',
+                         flags='-I$project/src',
+                         src_dirs=['src'])
+    app = link(exe_name="myapp",
+               dependencies=lib,
+               flags="-L-M")
+    bld = Build(app)
+
+    assert bld.jsonify() == \
+        [{"command": {"type": "link", "flags": "-L-M"},
+          "outputs": ["myapp"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "staticLibrary",
+              "name": "libstuff.a",
               "src_dirs": ["src"],
               "exclude_dirs": [],
               "src_files": [],
