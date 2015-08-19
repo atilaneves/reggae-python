@@ -1,7 +1,7 @@
-from json import JSONEncoder, dumps
+import json
 
 
-class ReggaeEncoder(JSONEncoder):
+class ReggaeEncoder(json.JSONEncoder):
     def default(self, o):
         if hasattr(o, 'jsonify'):
             return o.jsonify()
@@ -11,7 +11,7 @@ class ReggaeEncoder(JSONEncoder):
 
 def get_json(module):
     from reggae.reflect import get_build
-    return dumps(get_build(module), cls=ReggaeEncoder)
+    return json.dumps(get_build(module), cls=ReggaeEncoder)
 
 
 def main():

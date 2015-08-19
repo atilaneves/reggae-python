@@ -1,4 +1,4 @@
-from reggae.json import ReggaeEncoder
+from reggae.json_build import ReggaeEncoder
 from reggae.build import Target, Build
 from reggae.rules import link, object_files, static_library, scriptlike
 from json import dumps, loads
