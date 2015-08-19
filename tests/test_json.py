@@ -1,6 +1,6 @@
 from reggae.json import ReggaeEncoder
 from reggae.build import Target, Build
-from reggae.rules import link, objectFiles
+from reggae.rules import link, object_files
 from json import dumps, loads
 
 
@@ -115,7 +115,7 @@ def test_link_fixed():
 
 
 def test_link_dynamic():
-    objs = objectFiles(flags='-I$project/src', src_dirs=['src'])
+    objs = object_files(flags='-I$project/src', src_dirs=['src'])
     app = link(exe_name="myapp",
                dependencies=objs,
                flags="-L-M")

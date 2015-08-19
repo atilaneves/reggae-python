@@ -1,13 +1,13 @@
 from reggae.build import Target, Dependencies
 
 
-def objectFiles(src_dirs=[],
-                exclude_dirs=[],
-                src_files=[],
-                exclude_files=[],
-                flags='',
-                includes=[],
-                string_imports=[]):
+def object_files(src_dirs=[],
+                 exclude_dirs=[],
+                 src_files=[],
+                 exclude_files=[],
+                 flags='',
+                 includes=[],
+                 string_imports=[]):
     return DynamicDependencies('objectFiles',
                                src_dirs=src_dirs,
                                exclude_dirs=exclude_dirs,
