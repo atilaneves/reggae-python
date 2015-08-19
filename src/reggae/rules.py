@@ -63,3 +63,21 @@ def static_library(name,
                                flags=flags,
                                includes=includes,
                                string_imports=string_imports)
+
+
+def scriptlike(src_name=None,
+               exe_name=None,
+               flags='',
+               includes=[],
+               string_imports=[],
+               link_with=[]):
+    assert src_name is not None
+    assert exe_name is not None
+
+    return DynamicDependencies('scriptlike',
+                               src_name=src_name,
+                               exe_name=exe_name,
+                               flags=flags,
+                               includes=includes,
+                               string_imports=string_imports,
+                               link_with=link_with)

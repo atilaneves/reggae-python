@@ -8,7 +8,8 @@ class Target(object):
         self.implicits = _dependencies(implicits, FixedDependencies)
 
     def jsonify(self):
-        return {'outputs': self.outputs,
+        return {'type': 'fixed',
+                'outputs': self.outputs,
                 'command': self.cmd.jsonify(),
                 'dependencies': self.deps.jsonify(),
                 'implicits': self.implicits.jsonify()}
