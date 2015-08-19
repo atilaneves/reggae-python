@@ -4,8 +4,8 @@ class Target(object):
 
         self.outputs = outputs
         self.cmd = _jsonifiable(cmd, ShellCommand)
-        self.deps = _dependencies(deps, FixedDependencies)
-        self.implicits = _dependencies(implicits, FixedDependencies)
+        self.deps = dependencies(deps, FixedDependencies)
+        self.implicits = dependencies(implicits, FixedDependencies)
 
     def jsonify(self):
         return {'type': 'fixed',
@@ -23,7 +23,7 @@ def _jsonifiable(arg, cls):
     return arg if hasattr(arg, 'jsonify') else cls(arg)
 
 
-def _dependencies(arg, cls):
+def dependencies(arg, cls):
     return arg if isinstance(arg, Dependencies) else cls(arg)
 
 

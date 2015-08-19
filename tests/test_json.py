@@ -195,7 +195,7 @@ def test_scriptlike():
           "func": "scriptlike",
           "src_name": "src/main.d",
           "exe_name": "leapp",
-          "link_with": [],
+          "link_with": {"type": "fixed", "targets": []},
           "flags": "-g",
           "includes": ["src"],
           "string_imports": []}]

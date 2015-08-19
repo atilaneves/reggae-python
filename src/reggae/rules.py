@@ -1,4 +1,4 @@
-from reggae.build import Target, Dependencies
+from reggae.build import Target, Dependencies, FixedDependencies, dependencies
 
 
 def object_files(src_dirs=[],
@@ -25,7 +25,11 @@ class Dynamic(object):
 
     def jsonify(self):
         base = {'type': 'dynamic', 'func': self.func_name}
-        base.update(self.kwargs)
+        for k, v in self.kwargs.items():
+            if hasattr(v, 'jsonify'):
+                base[k] = v.jsonify()
+            else:
+                base[k] = v
         return base
 
 
@@ -91,4 +95,4 @@ def scriptlike(src_name=None,
                    flags=flags,
                    includes=includes,
                    string_imports=string_imports,
-                   link_with=link_with)
+                   link_with=dependencies(link_with, FixedDependencies))
