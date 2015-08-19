@@ -1,13 +1,11 @@
 class Target(object):
     def __init__(self, outputs, cmd="", deps=[], implicits=[]):
         outputs = _listify(outputs)
-        deps = _listify(deps)
-        implicits = _listify(implicits)
 
         self.outputs = outputs
-        self.cmd = cmd if _is_command(cmd) else ShellCommand(cmd)
-        self.deps = FixedDependencies(deps)
-        self.implicits = FixedDependencies(implicits)
+        self.cmd = _jsonifiable(cmd, ShellCommand)
+        self.deps = _dependencies(deps, FixedDependencies)
+        self.implicits = _dependencies(implicits, FixedDependencies)
 
     def jsonify(self):
         return {'outputs': self.outputs,
@@ -20,8 +18,12 @@ def _listify(arg):
     return arg if isinstance(arg, list) else [arg]
 
 
-def _is_command(obj):
-    return hasattr(obj, 'jsonify')
+def _jsonifiable(arg, cls):
+    return arg if hasattr(arg, 'jsonify') else cls(arg)
+
+
+def _dependencies(arg, cls):
+    return arg if isinstance(arg, Dependencies) else cls(arg)
 
 
 class ShellCommand(object):
@@ -34,9 +36,13 @@ class ShellCommand(object):
         return {'type': 'shell', 'cmd': self.cmd}
 
 
-class FixedDependencies(object):
+class Dependencies(object):
+    pass
+
+
+class FixedDependencies(Dependencies):
     def __init__(self, deps):
-        self.deps = deps
+        self.deps = _listify(deps)
 
     def jsonify(self):
         return {'type': 'fixed', 'targets': [t.jsonify() for t in self.deps]}
