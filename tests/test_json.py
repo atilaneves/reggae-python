@@ -183,28 +183,21 @@ def test_static_lib():
     assert(loads(json) == bld.jsonify())
 
 
-# def test_scriptlike():
-#     app = scriptlike(src_name='src/main.d',
-#                      exe_name='leapp',
-#                      flags='-g',
-#                      includes=['src'])
-#     bld = Build(app)
+def test_scriptlike():
+    app = scriptlike(src_name='src/main.d',
+                     exe_name='leapp',
+                     flags='-g',
+                     includes=['src'])
+    bld = Build(app)
 
-#     assert bld.jsonify() == \
-#         [{
-#           "type": "dynamic", "command": {"type": "link", "flags": "-L-M"},
-#           "outputs": ["leapp"],
-#           "dependencies": {
-#               "type": "dynamic",
-#               "func": "scriptlike",
-#               "src_name": "src/main.d",
-#               "exe_name": "leapp",
-#               "link_with": [],
-#               "flags": "-g",
-#               "includes": ["src"],
-#               "string_imports": []},
-#           "implicits": {
-#               "type": "fixed",
-#               "targets": []}}]
-#     json = dumps(bld, cls=ReggaeEncoder)
-#     assert(loads(json) == bld.jsonify())
+    assert bld.jsonify() == \
+        [{"type": "dynamic",
+          "func": "scriptlike",
+          "src_name": "src/main.d",
+          "exe_name": "leapp",
+          "link_with": [],
+          "flags": "-g",
+          "includes": ["src"],
+          "string_imports": []}]
+    json = dumps(bld, cls=ReggaeEncoder)
+    assert(loads(json) == bld.jsonify())

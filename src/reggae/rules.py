@@ -18,7 +18,18 @@ def object_files(src_dirs=[],
                                string_imports=string_imports)
 
 
-class DynamicDependencies(Dependencies):
+class Dynamic(object):
+    def __init__(self, func_name, **kwargs):
+        self.func_name = func_name
+        self.kwargs = kwargs
+
+    def jsonify(self):
+        base = {'type': 'dynamic', 'func': self.func_name}
+        base.update(self.kwargs)
+        return base
+
+
+class DynamicDependencies(Dynamic, Dependencies):
     def __init__(self, func_name, **kwargs):
         self.func_name = func_name
         self.kwargs = kwargs
@@ -74,10 +85,10 @@ def scriptlike(src_name=None,
     assert src_name is not None
     assert exe_name is not None
 
-    return DynamicDependencies('scriptlike',
-                               src_name=src_name,
-                               exe_name=exe_name,
-                               flags=flags,
-                               includes=includes,
-                               string_imports=string_imports,
-                               link_with=link_with)
+    return Dynamic('scriptlike',
+                   src_name=src_name,
+                   exe_name=exe_name,
+                   flags=flags,
+                   includes=includes,
+                   string_imports=string_imports,
+                   link_with=link_with)
