@@ -1,1 +1,3 @@
 .coverage
+dist
+reggae.egg-info
