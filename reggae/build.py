@@ -1,8 +1,6 @@
 class Target(object):
     def __init__(self, outputs, cmd="", deps=[], implicits=[]):
-        outputs = _listify(outputs)
-
-        self.outputs = outputs
+        self.outputs = _listify(outputs)
         self.cmd = _jsonifiable(cmd, ShellCommand)
         self.deps = dependencies(deps, FixedDependencies)
         self.implicits = dependencies(implicits, FixedDependencies)
