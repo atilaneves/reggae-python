@@ -201,3 +201,53 @@ def test_scriptlike():
           "string_imports": []}]
     json = dumps(bld, cls=ReggaeEncoder)
     assert(loads(json) == bld.jsonify())
+
+
+def test_build_two_targets():
+    objs1 = object_files(flags='-I$project/src',
+                         src_dirs=['src'])
+    app1 = link(exe_name="app1",
+                dependencies=objs1,
+                flags="-L-M")
+    objs2 = object_files(flags='-I$project/other',
+                         src_dirs=['other', 'yetanother'])
+    app2 = link(exe_name="app2",
+                dependencies=objs2)
+
+    bld = Build(app1, app2)
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "link", "flags": "-L-M"},
+          "outputs": ["app1"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "objectFiles",
+              "src_dirs": ["src"],
+              "exclude_dirs": [],
+              "src_files": [],
+              "exclude_files": [],
+              "flags": "-I$project/src",
+              "includes": [],
+              "string_imports": []},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}},
+         {"type": "fixed",
+          "command": {"type": "link", "flags": ""},
+          "outputs": ["app2"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "objectFiles",
+              "src_dirs": ["other", "yetanother"],
+              "exclude_dirs": [],
+              "src_files": [],
+              "exclude_files": [],
+              "flags": "-I$project/other",
+              "includes": [],
+              "string_imports": []},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}}]
+    json = dumps(bld, cls=ReggaeEncoder)
+    assert(loads(json) == bld.jsonify())
