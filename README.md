@@ -14,9 +14,9 @@ Installation
 Usage
 ------------
 
-This gem makes available a few classes and functions that allow the user to write
-build descriptions in Ruby. It is essentially the same API as the D version but in
-Ruby syntax. A simple C build could be written like this:
+This packge makes available a few classes and functions that allow the user to write
+build descriptions in Python. It is essentially the same API as the D version but in
+Python syntax. A simple C build could be written like this:
 
     from reggae import *
     main_obj = Target('main.o', 'gcc -I$project/src -c $in -o $out', Target('src/main.c'))
@@ -31,10 +31,10 @@ Running the `reggae` D binary on that directory will produce a build with the re
 Most builds will probably not resort to low-level primitives as above. A better way to describe
 that C build would be:
 
-    require 'reggae'
-    objs =  object_files(flags: '-I$project/src', src_dirs: ['src'])
+    from reggae import *
+    objs =  object_files(flags='-I$project/src', src_dirs=['src'])
     app = link(exe_name='app', dependencies=objs)
-    bld = Build.new(app)
+    bld = Build(app)
 
 
 Please consult the [reggae documentation](https://github.com/atilaneves/reggae/tree/master/doc/index.md)
