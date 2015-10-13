@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='reggae',
-    version='0.1',
+    version='0.1.1',
     description='Python front-end to the Reggae meta-build system',
     url='https://github.com/atilaneves/reggae-python',
     license='BSD',
