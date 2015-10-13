@@ -2,6 +2,7 @@ from reggae.json_build import ReggaeEncoder
 from reggae.build import Target, Build
 from reggae.rules import link, object_files, static_library, scriptlike
 from json import dumps, loads
+import pytest
 
 
 def test_target():
@@ -251,3 +252,26 @@ def test_build_two_targets():
               "targets": []}}]
     json = dumps(bld, cls=ReggaeEncoder)
     assert(loads(json) == bld.jsonify())
+
+
+def test_object_files_error():
+    with pytest.raises(TypeError):
+        object_files('')
+
+    with pytest.raises(TypeError):
+        object_files([], '')
+
+    with pytest.raises(TypeError):
+        object_files([], [], '')
+
+    with pytest.raises(TypeError):
+        object_files([], [], [], '')
+
+    with pytest.raises(TypeError):
+        object_files([], [], [], [], [])
+
+    with pytest.raises(TypeError):
+        object_files([], [], [], [], '', '')
+
+    with pytest.raises(TypeError):
+        object_files([], [], [], [], '', [], '')

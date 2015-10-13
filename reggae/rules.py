@@ -8,6 +8,14 @@ def object_files(src_dirs=[],
                  flags='',
                  includes=[],
                  string_imports=[]):
+
+    if any(not isinstance(x, list) for x in
+           (src_dirs, exclude_dirs, src_files, exclude_files, includes, string_imports)):
+        raise TypeError("All arguments except flags must be lists")
+
+    if not isinstance(flags, basestring):
+        raise TypeError("flags must be a string")
+
     return DynamicDependencies('objectFiles',
                                src_dirs=src_dirs,
                                exclude_dirs=exclude_dirs,
