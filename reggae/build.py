@@ -1,3 +1,7 @@
+from __future__ import (unicode_literals, division,
+                        absolute_import, print_function)
+
+
 class Target(object):
     def __init__(self, outputs, cmd="", deps=[], implicits=[]):
         self.outputs = _listify(outputs)

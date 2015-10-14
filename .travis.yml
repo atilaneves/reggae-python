@@ -8,3 +8,4 @@ install:
   - export PYTHONPATH=$PWD
 
 script: py.test -vv --capture=no .
+
