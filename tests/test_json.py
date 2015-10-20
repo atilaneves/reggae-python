@@ -1,4 +1,3 @@
-from reggae.json_build import ReggaeEncoder
 from reggae.build import Target, Build
 from reggae.rules import link, object_files, static_library, scriptlike
 from json import dumps, loads
@@ -13,7 +12,7 @@ def test_target():
                              "dependencies": {"type": "fixed", "targets": []},
                              "implicits": {"type": "fixed", "targets": []}}
 
-    json = dumps(tgt, cls=ReggaeEncoder)
+    json = dumps(tgt.jsonify())
     assert loads(json) == tgt.jsonify()
 
 
@@ -36,7 +35,7 @@ def test_build():
                                                        "targets": []}}]},
                                 "implicits": {"type": "fixed", "targets": []}}]
 
-    json = dumps(build, cls=ReggaeEncoder)
+    json = dumps(build.jsonify())
     assert(loads(json) == build.jsonify())
 
 
@@ -121,7 +120,7 @@ def test_link_fixed():
           "implicits": {
               "type": "fixed",
               "targets": []}}]
-    json = dumps(bld, cls=ReggaeEncoder)
+    json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
 
 
@@ -149,7 +148,7 @@ def test_link_dynamic():
           "implicits": {
               "type": "fixed",
               "targets": []}}]
-    json = dumps(bld, cls=ReggaeEncoder)
+    json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
 
 
@@ -180,7 +179,7 @@ def test_static_lib():
           "implicits": {
               "type": "fixed",
               "targets": []}}]
-    json = dumps(bld, cls=ReggaeEncoder)
+    json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
 
 
@@ -200,7 +199,7 @@ def test_scriptlike():
           "flags": "-g",
           "includes": ["src"],
           "string_imports": []}]
-    json = dumps(bld, cls=ReggaeEncoder)
+    json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
 
 
@@ -250,7 +249,7 @@ def test_build_two_targets():
           "implicits": {
               "type": "fixed",
               "targets": []}}]
-    json = dumps(bld, cls=ReggaeEncoder)
+    json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
 
 

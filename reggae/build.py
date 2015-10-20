@@ -57,3 +57,13 @@ class Build(object):
 
     def jsonify(self):
         return [t.jsonify() for t in self.targets]
+
+
+class DefaultOptions(object):
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+
+    def jsonify(self):
+        json = self.kwargs.copy()
+        json['type'] = 'defaultOptions'
+        return json

@@ -5,17 +5,13 @@ from __future__ import (unicode_literals, division,
 import json
 
 
-class ReggaeEncoder(json.JSONEncoder):
-    def default(self, o):
-        if hasattr(o, 'jsonify'):
-            return o.jsonify()
-        else:
-            super().default(o)
-
-
 def get_json(module):
-    from reggae.reflect import get_build
-    return json.dumps(get_build(module), cls=ReggaeEncoder)
+    from reggae.reflect import get_build, get_default_options
+    build = get_build(module)
+    default_opts = get_default_options(module)
+    opts_json = [] if default_opts is None else [default_opts.jsonify()]
+
+    return json.dumps(build.jsonify() + opts_json)
 
 
 def main():
