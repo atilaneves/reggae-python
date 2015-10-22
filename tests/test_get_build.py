@@ -6,7 +6,7 @@ import sys
 
 
 build = Build(Target("foo", "dmd -offoo foo.d", [Target("foo.d")]))
-def_opts = DefaultOptions(cCompiler='weirdcc')
+def_opts = DefaultOptions(cCompiler='weirdcc', oldNinja=True)
 
 
 def test_get_build():
@@ -28,4 +28,5 @@ def test_get_json_for_module():
           'outputs': ['foo'],
           'type': 'fixed'},
          {'type': 'defaultOptions',
-          'cCompiler': 'weirdcc'}]
+          'cCompiler': 'weirdcc',
+         'oldNinja': True}]
