@@ -109,3 +109,8 @@ def scriptlike(src_name=None,
                    includes=includes,
                    string_imports=string_imports,
                    link_with=dependencies(link_with, FixedDependencies))
+
+
+def target_concat(*args):
+    return DynamicDependencies('targetConcat',
+                               dependencies=[x.jsonify() for x in args])

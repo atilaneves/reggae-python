@@ -1,5 +1,5 @@
 from reggae.build import Target, Build
-from reggae.rules import link, object_files, static_library, scriptlike
+from reggae.rules import *  # noqa
 from json import dumps, loads
 import pytest
 
@@ -274,3 +274,67 @@ def test_object_files_error():
 
     with pytest.raises(TypeError):
         object_files([], [], [], [], '', [], '')
+
+
+def test_target_concat():
+    mainObj = Target("main.o",
+                     "dmd -I$project/src -c $in -of$out",
+                     Target("src/main.d"))
+    mathsObj = Target("maths.o",
+                      "dmd -c $in -of$out",
+                      Target("src/maths.d"))
+    app = link(exe_name="myapp",
+               dependencies=target_concat(mainObj, mathsObj),
+               flags="-L-M")
+    bld = Build(app)
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "link", "flags": "-L-M"},
+          "outputs": ["myapp"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "targetConcat",
+              "dependencies": [
+                  {"type": "fixed",
+                   "command": {"type": "shell",
+                               "cmd": "dmd -I$project/src -c $in -of$out"},
+                   "outputs": ["main.o"],
+                   "dependencies": {"type": "fixed",
+                                    "targets": [
+                                        {"type": "fixed",
+                                         "command": {},
+                                         "outputs": ["src/main.d"],
+                                         "dependencies": {
+                                             "type": "fixed",
+                                             "targets": []},
+                                         "implicits": {
+                                             "type": "fixed",
+                                             "targets": []}}]},
+                   "implicits": {
+                       "type": "fixed",
+                       "targets": []}},
+                  {"type": "fixed",
+                   "command": {"type": "shell", "cmd":
+                               "dmd -c $in -of$out"},
+                   "outputs": ["maths.o"],
+                   "dependencies": {
+                       "type": "fixed",
+                       "targets": [
+                           {"type": "fixed",
+                            "command": {}, "outputs": ["src/maths.d"],
+                            "dependencies": {
+                                "type": "fixed",
+                                "targets": []},
+                            "implicits": {
+                                "type": "fixed",
+                                "targets": []}}]},
+                   "implicits": {
+                       "type": "fixed",
+                       "targets": []}}]},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}}]
+
+    json = dumps(bld.jsonify())
+    assert(loads(json) == bld.jsonify())
