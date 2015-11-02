@@ -3,6 +3,7 @@ from __future__ import (unicode_literals, division,
 
 
 import json
+import argparse
 
 
 def get_json(module):
@@ -15,10 +16,16 @@ def get_json(module):
 
 
 def main():
+    parser = argparse.ArgumentParser(description='oh hello')
+    parser.add_argument('--dict', type=json.loads, default=dict())
+    parser.add_argument('project_path', help='The project path')
+    args = parser.parse_args()
+
+    from reggae import set_user_vars
+    set_user_vars(args.dict)
+
     import sys
-    assert len(sys.argv) == 2
-    project_path = sys.argv[1]
-    sys.path.append(project_path)
+    sys.path.append(args.project_path)
     import reggaefile
     print(get_json(reggaefile))
 
