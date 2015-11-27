@@ -32,7 +32,7 @@ def dependencies(arg, cls):
         return arg
 
     if isinstance(arg, list) and len(arg) > 1 and \
-       isinstance(arg[0], DynamicDependencies):
+       any(isinstance(x, DynamicDependencies) for x in arg):
         return target_concat(*arg)
 
     return cls(arg)
