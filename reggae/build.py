@@ -26,7 +26,16 @@ def _jsonifiable(arg, cls):
 
 
 def dependencies(arg, cls):
-    return arg if isinstance(arg, Dependencies) else cls(arg)
+    from reggae.rules import DynamicDependencies, target_concat
+
+    if isinstance(arg, Dependencies):
+        return arg
+
+    if isinstance(arg, list) and len(arg) > 1 and \
+       isinstance(arg[0], DynamicDependencies):
+        return target_concat(*arg)
+
+    return cls(arg)
 
 
 class ShellCommand(object):

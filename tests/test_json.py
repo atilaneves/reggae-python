@@ -338,3 +338,56 @@ def test_target_concat():
 
     json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
+
+
+def test_link_dynamic_concat():
+    main_obj = Target("main.o",
+                      "dmd -I$project/src -c $in -of$out",
+                      Target("src/main.d"))
+    objs = object_files(flags='-I$project/src', src_dirs=['src'])
+    app = link(exe_name="myapp",
+               dependencies=[objs, main_obj],
+               flags="-L-M")
+    bld = Build(app)
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "link", "flags": "-L-M"},
+          "outputs": ["myapp"],
+          "implicits": {"type": "fixed", "targets": []},
+          "dependencies": {
+              "type": "dynamic",
+              "func": "targetConcat",
+              "dependencies": [
+                  {"type": "dynamic",
+                   "func": "objectFiles",
+                   "src_dirs": ["src"],
+                   "exclude_dirs": [],
+                   "src_files": [],
+                   "exclude_files": [],
+                   "flags": "-I$project/src",
+                   "includes": [],
+                   "string_imports": []},
+                  {"type": "fixed",
+                   "command": {"type": "shell",
+                               "cmd": "dmd -I$project/src -c $in -of$out"},
+                   "outputs": ["main.o"],
+                   "dependencies": {"type": "fixed",
+                                    "targets": [
+                                        {"type": "fixed",
+                                         "command": {},
+                                         "outputs": ["src/main.d"],
+                                         "dependencies": {
+                                             "type": "fixed",
+                                             "targets": []},
+                                         "implicits": {
+                                             "type": "fixed",
+                                             "targets": []}}]},
+                   "implicits": {
+                       "type": "fixed",
+                       "targets": []}},
+              ]
+
+          }}]
+    json = dumps(bld.jsonify())
+    assert(loads(json) == bld.jsonify())
