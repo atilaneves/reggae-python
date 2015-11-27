@@ -391,3 +391,31 @@ def test_link_dynamic_concat():
           }}]
     json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
+
+
+def test_src_files():
+    objs = object_files(flags='-g -pg',
+                        src_dirs=['src'],
+                        src_files=['main.cpp'])
+    app = link(exe_name='myapp', dependencies=objs)
+    bld = Build(app)
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "link", "flags": ""},
+          "outputs": ["myapp"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "objectFiles",
+              "src_dirs": ["src"],
+              "exclude_dirs": [],
+              "src_files": ['main.cpp'],
+              "exclude_files": [],
+              "flags": "-g -pg",
+              "includes": [],
+              "string_imports": []},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}}]
+    json = dumps(bld.jsonify())
+    assert(loads(json) == bld.jsonify())
