@@ -99,8 +99,8 @@ def scriptlike(src_name=None,
                includes=[],
                string_imports=[],
                link_with=[]):
+
     assert src_name is not None
-    assert exe_name is not None
 
     return Dynamic('scriptlike',
                    src_name=src_name,
