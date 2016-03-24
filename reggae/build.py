@@ -35,6 +35,9 @@ def dependencies(arg, cls):
        any(isinstance(x, DynamicDependencies) for x in arg):
         return target_concat(*arg)
 
+    if isinstance(arg, list) and len(arg) == 1:
+        return dependencies(arg[0], cls)
+
     return cls(arg)
 
 

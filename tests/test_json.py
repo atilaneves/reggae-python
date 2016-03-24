@@ -419,3 +419,29 @@ def test_src_files():
               "targets": []}}]
     json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
+
+
+def test_list_with_one_item():
+    objs = object_files(src_dirs=['src'])
+    app = link(exe_name='myapp', dependencies=[objs])
+    bld = Build(app)
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "link", "flags": ""},
+          "outputs": ["myapp"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "objectFiles",
+              "src_dirs": ["src"],
+              "exclude_dirs": [],
+              "src_files": [],
+              "exclude_files": [],
+              "flags": "",
+              "includes": [],
+              "string_imports": []},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}}]
+    json = dumps(bld.jsonify())
+    assert(loads(json) == bld.jsonify())
