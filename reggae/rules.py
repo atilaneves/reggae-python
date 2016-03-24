@@ -31,44 +31,28 @@ def object_files(src_dirs=[],
                                string_imports=string_imports)
 
 
-class Dynamic(object):
-    def __init__(self, func_name, **kwargs):
-        self.func_name = func_name
-        self.kwargs = kwargs
-
-    def jsonify(self):
-        base = {'type': 'dynamic', 'func': self.func_name}
-        for k, v in self.kwargs.items():
-            if hasattr(v, 'jsonify'):
-                base[k] = v.jsonify()
-            else:
-                base[k] = v
-        return base
-
-
-class DynamicDependencies(Dynamic, Dependencies):
-    def __init__(self, func_name, **kwargs):
-        self.func_name = func_name
-        self.kwargs = kwargs
-
-    def jsonify(self):
-        base = {'type': 'dynamic', 'func': self.func_name}
-        base.update(self.kwargs)
-        return base
-
-
 def link(exe_name=None, flags='', dependencies=None, implicits=[]):
     assert exe_name is not None
     assert dependencies is not None
     return Target([exe_name], LinkCommand(flags), dependencies, implicits)
 
 
-class LinkCommand(object):
-    def __init__(self, flags=''):
-        self.flags = flags
-
-    def jsonify(self):
-        return {'type': 'link', 'flags': self.flags}
+def executable(name=None,
+               src_dirs=[],
+               exclude_dirs=[],
+               src_files=[],
+               exclude_files=[],
+               compiler_flags='',
+               linker_flags='',
+               includes=[],
+               string_imports=[],
+               implicits=[]):
+    objs = object_files(src_dirs=src_dirs, exclude_dirs=exclude_dirs,
+                        src_files=src_files, exclude_files=exclude_files,
+                        flags=compiler_flags, includes=includes,
+                        string_imports=string_imports)
+    return link(exe_name=name, flags=linker_flags,
+                dependencies=objs, implicits=implicits)
 
 
 def static_library(name,
@@ -109,6 +93,40 @@ def scriptlike(src_name=None,
                    includes=includes,
                    string_imports=string_imports,
                    link_with=dependencies(link_with, FixedDependencies))
+
+
+class Dynamic(object):
+    def __init__(self, func_name, **kwargs):
+        self.func_name = func_name
+        self.kwargs = kwargs
+
+    def jsonify(self):
+        base = {'type': 'dynamic', 'func': self.func_name}
+        for k, v in self.kwargs.items():
+            if hasattr(v, 'jsonify'):
+                base[k] = v.jsonify()
+            else:
+                base[k] = v
+        return base
+
+
+class DynamicDependencies(Dynamic, Dependencies):
+    def __init__(self, func_name, **kwargs):
+        self.func_name = func_name
+        self.kwargs = kwargs
+
+    def jsonify(self):
+        base = {'type': 'dynamic', 'func': self.func_name}
+        base.update(self.kwargs)
+        return base
+
+
+class LinkCommand(object):
+    def __init__(self, flags=''):
+        self.flags = flags
+
+    def jsonify(self):
+        return {'type': 'link', 'flags': self.flags}
 
 
 def target_concat(*args):

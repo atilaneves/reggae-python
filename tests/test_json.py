@@ -445,3 +445,30 @@ def test_list_with_one_item():
               "targets": []}}]
     json = dumps(bld.jsonify())
     assert(loads(json) == bld.jsonify())
+
+
+def test_executable():
+    bld = Build(executable(name="myapp",
+                           compiler_flags='-I$project/src',
+                           src_dirs=['src'],
+                           linker_flags='-L-M'))
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "link", "flags": "-L-M"},
+          "outputs": ["myapp"],
+          "dependencies": {
+              "type": "dynamic",
+              "func": "objectFiles",
+              "src_dirs": ["src"],
+              "exclude_dirs": [],
+              "src_files": [],
+              "exclude_files": [],
+              "flags": "-I$project/src",
+              "includes": [],
+              "string_imports": []},
+          "implicits": {
+              "type": "fixed",
+              "targets": []}}]
+    json = dumps(bld.jsonify())
+    assert(loads(json) == bld.jsonify())
