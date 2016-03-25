@@ -4,3 +4,4 @@ reggae.egg-info
 .cache
 __pycache__
 .ropeproject
+*.pyc

@@ -5,6 +5,17 @@ from __future__ import (unicode_literals, division,
 from reggae.build import Target, Dependencies, FixedDependencies, dependencies
 
 
+def _is_string(val):
+    import sys
+    major = sys.version_info[0]
+    if major == 2:
+        return isinstance(val, basestring)
+    elif major >= 3:
+        return isinstance(val, str)
+    else:
+        raise Exception("Unknown major version {}".format(major))
+
+
 def object_files(src_dirs=[],
                  exclude_dirs=[],
                  src_files=[],
@@ -18,7 +29,7 @@ def object_files(src_dirs=[],
             includes, string_imports)):
         raise TypeError("All arguments except flags must be lists")
 
-    if not isinstance(flags, str):
+    if not _is_string(flags):
         raise TypeError("flags must be a string")
 
     return DynamicDependencies('objectFiles',
