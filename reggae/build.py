@@ -8,13 +8,19 @@ class Target(object):
         self.cmd = _jsonifiable(cmd, ShellCommand)
         self.deps = dependencies(deps, FixedDependencies)
         self.implicits = dependencies(implicits, FixedDependencies)
+        self.optional = False
 
     def jsonify(self):
-        return {'type': 'fixed',
-                'outputs': self.outputs,
-                'command': self.cmd.jsonify(),
-                'dependencies': self.deps.jsonify(),
-                'implicits': self.implicits.jsonify()}
+        ret = {'type': 'fixed',
+               'outputs': self.outputs,
+               'command': self.cmd.jsonify(),
+               'dependencies': self.deps.jsonify(),
+               'implicits': self.implicits.jsonify()}
+
+        if self.optional:
+            ret['optional'] = True
+
+        return ret
 
 
 def _listify(arg):
@@ -79,3 +85,8 @@ class DefaultOptions(object):
         json = self.kwargs.copy()
         json['type'] = 'defaultOptions'
         return json
+
+
+def optional(tgt):
+    tgt.optional = True
+    return tgt

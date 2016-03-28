@@ -1,4 +1,4 @@
-from reggae.build import Target, Build
+from reggae.build import Target, Build, optional
 from reggae.rules import *  # noqa
 from json import dumps, loads
 import pytest
@@ -11,6 +11,19 @@ def test_target():
                              "outputs": ["foo.d"],
                              "dependencies": {"type": "fixed", "targets": []},
                              "implicits": {"type": "fixed", "targets": []}}
+
+    json = dumps(tgt.jsonify())
+    assert loads(json) == tgt.jsonify()
+
+
+def test_optional_target():
+    tgt = optional(Target("foo.d"))
+    assert tgt.jsonify() == {"type": "fixed",
+                             "command": {},
+                             "outputs": ["foo.d"],
+                             "dependencies": {"type": "fixed", "targets": []},
+                             "implicits": {"type": "fixed", "targets": []},
+                             "optional": True}
 
     json = dumps(tgt.jsonify())
     assert loads(json) == tgt.jsonify()
