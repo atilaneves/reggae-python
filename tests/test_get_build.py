@@ -1,6 +1,6 @@
 from reggae.reflect import get_build
 from reggae.build import Build, Target, DefaultOptions
-from reggae.json_build import get_json
+from reggae.reggae_json_build import get_json
 import json
 import sys
 
