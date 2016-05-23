@@ -24,7 +24,8 @@ def get_dependencies(module):
 
     finder = ModuleFinder()
     finder.run_script(module)
-    all_module_paths = [m.__file__ for m in finder.modules.values()]
+    all_module_paths = [os.path.abspath(m.__file__) for
+                        m in finder.modules.values() if m.__file__ is not None]
 
     def is_in_same_path(p):
         return p and os.path.dirname(p).startswith(os.path.dirname(module))
