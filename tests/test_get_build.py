@@ -15,18 +15,19 @@ def test_get_build():
 
 def test_get_json_for_module():
     assert json.loads(get_json(sys.modules[__name__])) == \
-        [{'command': {'cmd': 'dmd -offoo foo.d', 'type': 'shell'},
-          'dependencies': {'targets': [{'command': {},
-                                        'dependencies': {'targets': [],
-                                                         'type': 'fixed'},
-                                        'implicits': {'targets': [],
-                                                      'type': 'fixed'},
-                                        'outputs': ['foo.d'],
-                                        'type': 'fixed'}],
-                           'type': 'fixed'},
-          'implicits': {'targets': [], 'type': 'fixed'},
-          'outputs': ['foo'],
-          'type': 'fixed'},
-         {'type': 'defaultOptions',
-          'cCompiler': 'weirdcc',
-         'oldNinja': True}]
+        {'version': 1,
+         'defaultOptions': {'cCompiler': 'weirdcc', 'oldNinja': True},
+         'dependencies': [],
+         'build': [
+             {'command': {'cmd': 'dmd -offoo foo.d', 'type': 'shell'},
+              'dependencies': {'targets': [{'command': {},
+                                            'dependencies': {'targets': [],
+                                                             'type': 'fixed'},
+                                            'implicits': {'targets': [],
+                                                          'type': 'fixed'},
+                                            'outputs': ['foo.d'],
+                                            'type': 'fixed'}],
+                               'type': 'fixed'},
+              'implicits': {'targets': [], 'type': 'fixed'},
+              'outputs': ['foo'],
+              'type': 'fixed'}]}
