@@ -460,6 +460,46 @@ def test_list_with_one_item():
     assert(loads(json) == bld.jsonify())
 
 
+def test_mix_dynamic_and_static():
+    objs = object_files(flags='-I$project/src', src_dirs=['src'])
+    app = Target('app',
+                 'cmd',
+                 [objs, Target('libfoo.a')])
+    bld = Build(app)
+
+    assert bld.jsonify() == \
+        [{"type": "fixed",
+          "command": {"type": "shell", "cmd": "cmd"},
+          "outputs": ["app"],
+          "implicits": {"type": "fixed", "targets": []},
+          "dependencies": {
+              "type": "dynamic",
+              "func": "targetConcat",
+              "dependencies": [
+                  {"type": "dynamic",
+                   "func": "objectFiles",
+                   "src_dirs": ["src"],
+                   "exclude_dirs": [],
+                   "src_files": [],
+                   "exclude_files": [],
+                   "flags": "-I$project/src",
+                   "includes": [],
+                   "string_imports": []},
+                  {"type": "fixed",
+                   "command": {},
+                   "outputs": ["libfoo.a"],
+                   "dependencies": {"type": "fixed",
+                                    "targets": []},
+                   "implicits": {
+                       "type": "fixed",
+                       "targets": []}},
+              ]
+
+          }}]
+    json = dumps(bld.jsonify())
+    assert(loads(json) == bld.jsonify())
+
+
 def test_executable():
     bld = Build(executable(name="myapp",
                            compiler_flags='-I$project/src',
